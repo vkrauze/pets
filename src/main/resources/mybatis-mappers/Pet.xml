@@ -1,0 +1,33 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace = "Pet">
+
+ <insert id = "insert" parameterType = "Pet" useGeneratedKeys="true" keyProperty="public.pet.id" keyColumn="id">
+		INSERT INTO pet (name, species, owner ) VALUES (#{name}, #{species}, #{owner});
+			<selectKey keyProperty = "id" resultType = "int" order = "AFTER">
+				SELECT currval(pg_get_serial_sequence('pet','id')) as id				 
+			</selectKey>   
+  </insert>
+	 
+	<resultMap id = "result" type = "Pet">
+		 <result property = "id" column = "id"/>
+		 <result property = "name" column = "name"/>
+		 <result property = "species" column = "species"/>
+		 <result property = "owner" column = "owner"/>
+	</resultMap>
+
+	<select id = "getAll" resultMap = "result">
+		SELECT * FROM pet; 
+	</select>
+	 
+  <update id = "update" parameterType = "Pet">
+		UPDATE pet SET name = #{name}, species = #{species}, owner = #{owner} WHERE id = #{id};
+	</update>
+	
+	<delete id = "deleteById" parameterType = "int">
+		DELETE FROM pet WHERE id = #{id};
+	</delete>
+	
+</mapper>
